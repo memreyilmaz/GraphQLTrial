@@ -1,9 +1,9 @@
 query GithubUser($login:String!) {
     user(login: $login) {
-        avatarUrl(size: 500)
-        email
-        name
         login
+        avatarUrl(size: 500)
+        name
+        email
         followers {
             totalCount
         }

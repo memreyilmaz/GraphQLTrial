@@ -1,6 +1,8 @@
 query GetBio{
     viewer {
+        id
         login
+        name
         avatarUrl
         bio
         followers{
@@ -9,12 +11,10 @@ query GetBio{
         following{
             totalCount
         }
-        id
         websiteUrl
         twitterUsername
         repositories{
             totalCount
         }
-        name
     }
 }
