@@ -16,8 +16,8 @@ interface GitHubRepository {
 
     suspend fun getRepository(name:String, owner:String) : Response<GetRepositoryQuery.Data>
 
-    suspend fun getTopic(name: String, first: Int) : Response<GetTopicQuery.Data>
+    suspend fun getTopic(name: String) : Response<GetTopicQuery.Data>
 
-    suspend fun search(query: String, type: SearchType, first: Int) : Response<SearchQuery.Data>
+    suspend fun search(query: String, type: SearchType) : Response<SearchQuery.Data>
 
 }

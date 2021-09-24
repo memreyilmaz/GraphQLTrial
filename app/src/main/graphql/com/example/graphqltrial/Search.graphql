@@ -1,5 +1,5 @@
-query Search($query:String!, $type: SearchType!, $first: Int) {
-    search(query: $query, type: $type, first: $first) {
+query Search($query:String!, $type: SearchType!) {
+    search(query: $query, type: $type, first: 10) {
         codeCount
         userCount
         repositoryCount

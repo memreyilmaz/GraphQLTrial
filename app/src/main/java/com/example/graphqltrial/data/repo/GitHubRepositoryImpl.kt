@@ -1,7 +1,6 @@
 package com.example.graphqltrial.data.repo
 
 import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Input
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.await
 import com.example.graphqltrial.GetBioQuery
@@ -29,20 +28,18 @@ class GitHubRepositoryImpl @Inject constructor(private val client: ApolloClient)
         return client.query(GetRepositoryQuery(name = name, owner = owner)).await()
     }
 
-    override suspend fun getTopic(name: String, first: Int): Response<GetTopicQuery.Data> {
-        return client.query(GetTopicQuery(name = name, first = Input.fromNullable(first))).await()
+    override suspend fun getTopic(name: String): Response<GetTopicQuery.Data> {
+        return client.query(GetTopicQuery(name = name)).await()
     }
 
     override suspend fun search(
         query: String,
-        type: SearchType,
-        first: Int
+        type: SearchType
     ): Response<SearchQuery.Data> {
         return client.query(
             SearchQuery(
                 query = query,
-                type = type,
-                first = Input.fromNullable(first)
+                type = type
             )
         ).await()
     }

@@ -4,8 +4,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="button_desc_show_bio">Show My Bio</string>
-    <string name="button_desc_search_user">Search An User</string>
-    <string name="button_desc_search_repo">Search A Repository</string>
+    <string name="button_desc_search_user">Search User</string>
+    <string name="button_desc_search_repo">Search Repository</string>
     <string name="button_desc_search_topic">Search A Topic</string>
     <string name="button_desc_search">Search</string>
 
@@ -13,4 +13,9 @@
     <string name="desc_bio_following">%1$d following</string>
 
     <string name="desc_title_repositories">Repositories:</string>
+
+    <string name="edit_text_desc_enter_user_name">User Name</string>
+    <string name="edit_text_desc_enter_repository_name">Repository Name</string>
+    <string name="edit_text_desc_helper_required">Required *</string>
+
 </resources>

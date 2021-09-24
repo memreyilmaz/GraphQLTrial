@@ -72,19 +72,19 @@ class GitHubViewModel @Inject constructor(
         }
     }
 
-    fun getTopic(name: String, first: Int) = viewModelScope.launch {
+    fun getTopic(name: String) = viewModelScope.launch {
         _topicData.postValue(Result.Loading())
         try {
-            _topicData.postValue(Result.Success(repository.getTopic(name, first)))
+            _topicData.postValue(Result.Success(repository.getTopic(name)))
         } catch (e: ApolloException) {
             _topicData.postValue(Result.Error("Error fetching repository"))
         }
     }
 
-    fun search(query: String, type: SearchType, first: Int) = viewModelScope.launch {
+    fun search(query: String, type: SearchType) = viewModelScope.launch {
         _searchResultsData.postValue(Result.Loading())
         try {
-            _searchResultsData.postValue(Result.Success(repository.search(query, type, first)))
+            _searchResultsData.postValue(Result.Success(repository.search(query, type)))
         } catch (e: ApolloException) {
             _searchResultsData.postValue(Result.Error("Error fetching search results"))
         }

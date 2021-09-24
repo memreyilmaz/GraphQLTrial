@@ -1,8 +1,8 @@
-query GetTopic($name:String!, $first: Int) {
+query GetTopic($name:String!) {
     topic(name: $name) {
         id
         name
-        relatedTopics(first: $first){
+        relatedTopics(first: 10){
             name
         }
         stargazerCount
