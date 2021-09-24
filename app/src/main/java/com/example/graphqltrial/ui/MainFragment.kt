@@ -20,6 +20,31 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setButtonListeners()
+    }
+
+    private fun setButtonListeners() {
+        with(binding){
+            buttonShowBio.setOnClickListener {
+                //TODO navigate to Bio
+            }
+            buttonSearchUser.setOnClickListener {
+                //TODO navigate to Search
+            }
+            buttonSearchRepo.setOnClickListener {
+                //TODO navigate to Search
+            }
+            buttonSearchTopic.setOnClickListener {
+                //TODO navigate to Search
+            }
+            buttonSearch.setOnClickListener {
+                //TODO navigate to Search
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
