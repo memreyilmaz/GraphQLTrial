@@ -1,0 +1,10 @@
+query GetTopic($name:String!, $first: Int) {
+    topic(name: $name) {
+        id
+        name
+        relatedTopics(first: $first){
+            name
+        }
+        stargazerCount
+    }
+}

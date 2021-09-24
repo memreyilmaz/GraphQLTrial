@@ -1,0 +1,26 @@
+query GithubUser($login:String!) {
+    user(login: $login) {
+        avatarUrl(size: 500)
+        email
+        name
+        login
+        followers {
+            totalCount
+        }
+        following {
+            totalCount
+        }
+        pinnedItems(first: 6, types: [REPOSITORY]) {
+            nodes {
+                ... on Repository {
+                    name
+                    stargazerCount
+                    description
+                    primaryLanguage {
+                        name
+                    }
+                }
+            }
+        }
+    }
+}

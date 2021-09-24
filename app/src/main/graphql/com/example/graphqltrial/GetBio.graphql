@@ -1,0 +1,20 @@
+query GetBio{
+    viewer {
+        login
+        avatarUrl
+        bio
+        followers{
+            totalCount
+        }
+        following{
+            totalCount
+        }
+        id
+        websiteUrl
+        twitterUsername
+        repositories{
+            totalCount
+        }
+        name
+    }
+}

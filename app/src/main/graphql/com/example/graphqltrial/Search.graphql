@@ -1,0 +1,30 @@
+query Search($query:String!, $type: SearchType!, $first: Int) {
+    search(query: $query, type: $type, first: $first) {
+        codeCount
+        userCount
+        repositoryCount
+        wikiCount
+        discussionCount
+        nodes {
+            ... on Repository {
+                repositoryName: name
+                description
+                url
+                createdAt
+                stargazerCount
+            }
+            ... on User {
+                avatarUrl
+                email
+                userName: name
+                login
+                followers{
+                    totalCount
+                }
+                following {
+                    totalCount
+                }
+            }
+        }
+    }
+}
