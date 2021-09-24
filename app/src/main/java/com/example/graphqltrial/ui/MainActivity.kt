@@ -2,36 +2,31 @@ package com.example.graphqltrial.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
-import com.example.graphqltrial.utils.Result
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.graphqltrial.R
 import com.example.graphqltrial.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private lateinit var navController: NavController
 
-    private val gitHubViewModel by viewModels<GitHubViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        gitHubViewModel.getUser("jakewharton")
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.findNavController()
 
-        gitHubViewModel.userData.observe(this) { response ->
-            when (response) {
-                is Result.Success -> {
-                    binding.text.text = response.value?.data.toString()
-                }
-                is Result.Error -> {
-                    binding.text.text = response.message.toString()
-                }
-            }
+        setupActionBarWithNavController(navController)
+    }
 
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
