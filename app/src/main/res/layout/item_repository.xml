@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/small_margin"
+    app:cardCornerRadius="@dimen/default_radius">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_padding">
+
+        <TextView
+            android:id="@+id/texView_repository_name"
+            style="@style/BioTextView"
+            android:textSize="@dimen/text_size_big"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="butterknife" />
+
+        <TextView
+            android:id="@+id/texView_repository_description"
+            style="@style/BioTextView"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintStart_toStartOf="@id/texView_repository_name"
+            app:layout_constraintTop_toBottomOf="@id/texView_repository_name"
+            tools:text="Bind Android views and callbacks to fields and methods." />
+
+        <TextView
+            android:id="@+id/texView_repository_url"
+            style="@style/BioTextView.Iconized"
+            android:autoLink="web"
+            app:drawableStartCompat="@drawable/ic_link"
+            app:layout_constraintStart_toStartOf="@id/texView_repository_name"
+            app:layout_constraintTop_toBottomOf="@id/texView_repository_description"
+            tools:text="https://github.com/JakeWharton/butterknife" />
+
+        <TextView
+            android:id="@+id/texView_repository_star_count"
+            style="@style/BioTextView.Iconized"
+            app:drawableStartCompat="@drawable/ic_star"
+            app:layout_constraintStart_toStartOf="@id/texView_repository_name"
+            app:layout_constraintTop_toBottomOf="@id/texView_repository_url"
+            tools:text="25,732" />
+
+        <TextView
+            android:id="@+id/texView_repository_creation_date"
+            style="@style/BioTextView.Iconized"
+            app:drawableStartCompat="@drawable/ic_calendar"
+            app:layout_constraintStart_toStartOf="@id/texView_repository_name"
+            app:layout_constraintTop_toBottomOf="@id/texView_repository_star_count"
+            tools:text="24.09.2021" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

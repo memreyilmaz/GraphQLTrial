@@ -1,10 +1,12 @@
-package com.example.graphqltrial.ui
+package com.example.graphqltrial.ui.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.example.graphqltrial.R
 import com.example.graphqltrial.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -28,7 +30,7 @@ class MainFragment : Fragment() {
     private fun setButtonListeners() {
         with(binding){
             buttonShowBio.setOnClickListener {
-                //TODO navigate to Bio
+                findNavController().navigate(R.id.action_mainFragment_to_userBioFragment)
             }
             buttonSearchUser.setOnClickListener {
                 //TODO navigate to Search

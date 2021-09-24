@@ -7,7 +7,16 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.graphqltrial.ui.MainFragment"
+        android:name="com.example.graphqltrial.ui.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_userBioFragment"
+            app:destination="@id/userBioFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userBioFragment"
+        android:name="com.example.graphqltrial.ui.bio.UserBioFragment"
+        android:label="fragment_user_bio"
+        tools:layout="@layout/fragment_user_bio" />
 </navigation>

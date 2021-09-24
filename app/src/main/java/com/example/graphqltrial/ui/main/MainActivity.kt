@@ -1,4 +1,4 @@
-package com.example.graphqltrial.ui
+package com.example.graphqltrial.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,20 +1,31 @@
-query GetBio{
+query GetBio($first: Int, $orderBy: RepositoryOrder!){
     viewer {
-        id
         login
         name
+        email
         avatarUrl
         bio
+        websiteUrl
+        twitterUsername
         followers{
             totalCount
         }
         following{
             totalCount
         }
-        websiteUrl
-        twitterUsername
         repositories{
             totalCount
+        }
+        topRepositories(orderBy: $orderBy, first: $first){
+            nodes{
+                ... on Repository{
+                    name
+                    description
+                    url
+                    createdAt
+                    stargazerCount
+                }
+            }
         }
     }
 }

@@ -16,4 +16,10 @@
     <dimen name="large_padding">24dp</dimen>
     <dimen name="huge_padding">32dp</dimen>
 
+    <!-- Radius -->
+    <dimen name="default_radius">16dp</dimen>
+
+    <!-- Text Size -->
+    <dimen name="text_size_big">16sp</dimen>
+
 </resources>

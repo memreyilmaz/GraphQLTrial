@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.bio.UserBioFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_padding">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView_user_avatar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/texView_user_name"
+            style="@style/BioTextView"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            app:layout_constraintStart_toEndOf="@id/imageView_user_avatar"
+            app:layout_constraintTop_toTopOf="@id/imageView_user_avatar"
+            tools:text="Jake Wharton" />
+
+        <TextView
+            android:id="@+id/texView_user_nick_name"
+            style="@style/BioTextView"
+            app:layout_constraintStart_toStartOf="@id/texView_user_name"
+            app:layout_constraintTop_toBottomOf="@+id/texView_user_name"
+            tools:text="JakeWharton" />
+
+        <TextView
+            android:id="@+id/texView_user_bio"
+            style="@style/BioTextView"
+            app:layout_constraintStart_toStartOf="@id/texView_user_name"
+            app:layout_constraintTop_toBottomOf="@+id/texView_user_nick_name"
+            tools:text="Android Developer" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout_user_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="@id/imageView_user_avatar"
+            app:layout_constraintTop_toBottomOf="@id/imageView_user_avatar">
+
+            <TextView
+                android:id="@+id/texView_user_followers_count"
+                style="@style/BioTextView.Iconized"
+                app:drawableStartCompat="@drawable/ic_followers"
+                tools:text="61.1k followers" />
+
+            <TextView
+                android:id="@+id/texView_user_following_count"
+                style="@style/BioTextView.Iconized"
+                app:drawableStartCompat="@drawable/ic_following"
+                tools:text="9 following" />
+
+            <TextView
+                android:id="@+id/texView_user_email"
+                style="@style/BioTextView.Iconized"
+                android:autoLink="email"
+                app:drawableStartCompat="@drawable/ic_email"
+                tools:text="j@ke.fyi" />
+
+            <TextView
+                android:id="@+id/texView_user_website"
+                style="@style/BioTextView.Iconized"
+                android:autoLink="web"
+                app:drawableStartCompat="@drawable/ic_link"
+                tools:text="jakewharton.com" />
+
+            <TextView
+                android:id="@+id/texView_user_twitter"
+                style="@style/BioTextView.Iconized"
+                app:drawableStartCompat="@drawable/ic_twitter"
+                tools:text="JakeWharton" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/texView_user_repositories_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:text="@string/desc_title_repositories"
+            android:textSize="@dimen/text_size_big"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/linearLayout_user_detail"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/linearLayout_user_detail"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout_user_detail" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_user_repositories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/linearLayout_user_detail"
+            app:layout_constraintStart_toStartOf="@id/linearLayout_user_detail"
+            app:layout_constraintTop_toBottomOf="@id/texView_user_repositories_title" />
+
+        <TextView
+            android:id="@+id/texView_error"
+            style="@style/BioTextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Error Message" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

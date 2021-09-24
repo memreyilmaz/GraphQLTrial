@@ -9,6 +9,9 @@ import com.example.graphqltrial.GetRepositoryQuery
 import com.example.graphqltrial.GetTopicQuery
 import com.example.graphqltrial.GithubUserQuery
 import com.example.graphqltrial.SearchQuery
+import com.example.graphqltrial.type.OrderDirection
+import com.example.graphqltrial.type.RepositoryOrder
+import com.example.graphqltrial.type.RepositoryOrderField
 import com.example.graphqltrial.type.SearchType
 import javax.inject.Inject
 
@@ -19,7 +22,15 @@ class GitHubRepositoryImpl @Inject constructor(private val client: ApolloClient)
     }
 
     override suspend fun getBio(): Response<GetBioQuery.Data> {
-        return client.query(GetBioQuery()).await()
+        return client.query(
+            GetBioQuery(
+                first = Input.fromNullable(BIO_REPOSITORY_DEFAULT_COUNT),
+                orderBy = RepositoryOrder(
+                    field_ = RepositoryOrderField.STARGAZERS,
+                    direction = OrderDirection.ASC
+                )
+            )
+        ).await()
     }
 
     override suspend fun getRepository(
@@ -45,5 +56,9 @@ class GitHubRepositoryImpl @Inject constructor(private val client: ApolloClient)
                 first = Input.fromNullable(first)
             )
         ).await()
+    }
+
+    companion object {
+        const val BIO_REPOSITORY_DEFAULT_COUNT = 10
     }
 }

@@ -8,4 +8,9 @@
     <string name="button_desc_search_repo">Search A Repository</string>
     <string name="button_desc_search_topic">Search A Topic</string>
     <string name="button_desc_search">Search</string>
+
+    <string name="desc_bio_followers">%1$d followers</string>
+    <string name="desc_bio_following">%1$d following</string>
+
+    <string name="desc_title_repositories">Repositories:</string>
 </resources>
