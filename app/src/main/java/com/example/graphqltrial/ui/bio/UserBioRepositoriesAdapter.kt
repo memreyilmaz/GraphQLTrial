@@ -41,9 +41,11 @@ class UserBioRepositoriesAdapter :
                     texViewRepositoryDescription.showIfNotNull(it.description)
                     texViewRepositoryUrl.text = it.url.toString()
                     texViewRepositoryStarCount.text = it.stargazerCount.toString()
-                    //texViewRepositoryCreationDate.text = it.createdAt.toString()
-
-                    texViewRepositoryCreationDate.showIfNotNull(DefaultDateTimeConverter().formatDate(it.createdAt.toString()))
+                    texViewRepositoryCreationDate.showIfNotNull(
+                        DefaultDateTimeConverter().formatDate(
+                            it.createdAt.toString()
+                        )
+                    )
                 }
             }
         }

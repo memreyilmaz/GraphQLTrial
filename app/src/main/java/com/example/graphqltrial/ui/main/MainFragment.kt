@@ -33,16 +33,20 @@ class MainFragment : Fragment() {
                 findNavController().navigate(R.id.action_mainFragment_to_userBioFragment)
             }
             buttonSearchUser.setOnClickListener {
-                //TODO navigate to Search
+                //TODO pass search type
+                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
             }
             buttonSearchRepo.setOnClickListener {
-                //TODO navigate to Search
+                //TODO pass search type
+                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
             }
             buttonSearchTopic.setOnClickListener {
-                //TODO navigate to Search
+                //TODO pass search type
+                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
             }
             buttonSearch.setOnClickListener {
-                //TODO navigate to Search
+                //TODO pass search type
+                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
             }
         }
     }

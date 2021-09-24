@@ -1,4 +1,4 @@
-query GetBio($first: Int, $orderBy: RepositoryOrder!){
+query GetBio{
     viewer {
         login
         name
@@ -16,7 +16,7 @@ query GetBio($first: Int, $orderBy: RepositoryOrder!){
         repositories{
             totalCount
         }
-        topRepositories(orderBy: $orderBy, first: $first){
+        topRepositories(orderBy: {field: STARGAZERS, direction: ASC}, first: 10){
             nodes{
                 ... on Repository{
                     name

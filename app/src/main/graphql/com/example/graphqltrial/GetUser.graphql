@@ -1,24 +1,29 @@
 query GithubUser($login:String!) {
     user(login: $login) {
         login
-        avatarUrl(size: 500)
         name
         email
+        avatarUrl
+        bio
+        websiteUrl
+        twitterUsername
         followers {
             totalCount
         }
         following {
             totalCount
         }
-        pinnedItems(first: 6, types: [REPOSITORY]) {
-            nodes {
-                ... on Repository {
+        repositories {
+            totalCount
+        }
+        topRepositories(orderBy: {field: STARGAZERS, direction: ASC}, first: 10){
+            nodes{
+                ... on Repository{
                     name
-                    stargazerCount
                     description
-                    primaryLanguage {
-                        name
-                    }
+                    url
+                    createdAt
+                    stargazerCount
                 }
             }
         }
