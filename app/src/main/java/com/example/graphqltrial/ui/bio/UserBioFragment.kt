@@ -5,18 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.apollographql.apollo.api.Response
-import com.example.graphqltrial.GetBioQuery
 import com.example.graphqltrial.R
 import com.example.graphqltrial.databinding.FragmentUserBioBinding
 import com.example.graphqltrial.ui.GitHubViewModel
+import com.example.graphqltrial.data.model.Repository
 import com.example.graphqltrial.utils.Result
+import com.example.graphqltrial.data.model.User
 import com.example.graphqltrial.utils.loadImage
 import com.example.graphqltrial.utils.showIf
 import com.example.graphqltrial.utils.showIfNot
 import com.example.graphqltrial.utils.showIfNotNull
+import com.example.graphqltrial.data.mapper.toUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -27,9 +29,12 @@ class UserBioFragment : Fragment() {
     private var _binding: FragmentUserBioBinding? = null
     private val binding get() = _binding!!
 
-    private val gitHubViewModel by viewModels<GitHubViewModel>()
+    private val gitHubViewModel: GitHubViewModel by activityViewModels()
 
     private val repositoriesAdapter by lazy { UserBioRepositoriesAdapter() }
+
+    private val args by navArgs<UserBioFragmentArgs>()
+    private var isUserComingFromSearch : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +46,28 @@ class UserBioFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        gitHubViewModel.getBio()
-        observeBio()
+        isUserComingFromSearch = args.isComingFromSearch
+        if (isUserComingFromSearch){
+            observeUser()
+        } else {
+            gitHubViewModel.getBio()
+            observeBio()
+        }
+    }
+
+    private fun observeUser() {
+        gitHubViewModel.userData.observe(viewLifecycleOwner) { response ->
+            binding.apply {
+                progressBar.showIf(response is Result.Loading)
+                linearLayoutUserDetail.showIfNot(response is Result.Loading)
+                recyclerViewUserRepositories.showIf(response is Result.Success)
+                texViewUserRepositoriesTitle.showIf(response is Result.Success)
+            }
+            when (response) {
+                is Result.Success -> initUi(response.value?.data?.user?.toUser())
+                is Result.Error -> initErrorUi(response.message)
+            }
+        }
     }
 
     private fun observeBio() {
@@ -54,34 +79,32 @@ class UserBioFragment : Fragment() {
                 texViewUserRepositoriesTitle.showIf(response is Result.Success)
             }
             when (response) {
-                is Result.Success -> initUi(response)
+                is Result.Success -> initUi(response.value?.data?.viewer?.toUser())
                 is Result.Error -> initErrorUi(response.message)
             }
         }
     }
 
-    private fun initUi(result: Result<Response<GetBioQuery.Data>>) {
-        val bio = result.value?.data?.viewer
-
-        bio?.let {
+    private fun initUi(result: User?) {
+        result?.let {
             with(binding) {
-                imageViewUserAvatar.loadImage(it.avatarUrl.toString(), requireContext())
+                imageViewUserAvatar.loadImage(it.avatar, requireContext())
                 texViewUserName.showIfNotNull(it.name)
-                texViewUserNickName.text = it.login
+                texViewUserNickName.text = it.nickname
                 texViewUserBio.showIfNotNull(it.bio)
                 texViewUserFollowersCount.text =
-                    getString(R.string.desc_bio_followers, it.followers.totalCount)
+                    getString(R.string.desc_bio_followers, it.followers)
                 texViewUserFollowingCount.text =
-                    getString(R.string.desc_bio_following, it.following.totalCount)
+                    getString(R.string.desc_bio_following, it.following)
                 texViewUserEmail.text = it.email
-                texViewUserWebsite.showIfNotNull(it.websiteUrl.toString())
-                texViewUserTwitter.showIfNotNull(it.twitterUsername)
+                texViewUserWebsite.showIfNotNull(it.website)
+                texViewUserTwitter.showIfNotNull(it.twitterUser)
             }
-            initRecyclerView(bio?.topRepositories?.nodes)
+            initRecyclerView(it.repositories)
         }
     }
 
-    private fun initRecyclerView(repositories: List<GetBioQuery.Node?>?) {
+    private fun initRecyclerView(repositories: List<Repository>) {
         binding.recyclerViewUserRepositories.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = repositoriesAdapter

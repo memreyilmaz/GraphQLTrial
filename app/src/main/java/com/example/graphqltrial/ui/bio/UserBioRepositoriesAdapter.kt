@@ -3,15 +3,15 @@ package com.example.graphqltrial.ui.bio
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.graphqltrial.GetBioQuery
 import com.example.graphqltrial.databinding.ItemRepositoryBinding
 import com.example.graphqltrial.utils.DefaultDateTimeConverter
+import com.example.graphqltrial.data.model.Repository
 import com.example.graphqltrial.utils.showIfNotNull
 
 class UserBioRepositoriesAdapter :
     RecyclerView.Adapter<UserBioRepositoriesAdapter.RepositoriesViewHolder>() {
 
-    private var repositories: List<GetBioQuery.Node?>? = listOf()
+    private var repositories: List<Repository?> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoriesViewHolder {
         val binding = LayoutInflater.from(parent.context).let {
@@ -24,9 +24,9 @@ class UserBioRepositoriesAdapter :
         holder.bind(repositories?.get(position))
     }
 
-    override fun getItemCount() = repositories?.size ?: 0
+    override fun getItemCount() = repositories?.size
 
-    fun updateItems(newRepositories: List<GetBioQuery.Node?>?) {
+    fun updateItems(newRepositories: List<Repository>) {
         repositories = newRepositories
         notifyDataSetChanged()
     }
@@ -34,16 +34,16 @@ class UserBioRepositoriesAdapter :
     class RepositoriesViewHolder(private val itemBinding: ItemRepositoryBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
-        fun bind(repository: GetBioQuery.Node?) {
+        fun bind(repository: Repository?) {
             repository?.let {
                 itemBinding.apply {
                     texViewRepositoryName.text = it.name
                     texViewRepositoryDescription.showIfNotNull(it.description)
-                    texViewRepositoryUrl.text = it.url.toString()
-                    texViewRepositoryStarCount.text = it.stargazerCount.toString()
+                    texViewRepositoryUrl.text = it.url
+                    texViewRepositoryStarCount.text = it.stargazerCount
                     texViewRepositoryCreationDate.showIfNotNull(
                         DefaultDateTimeConverter().formatDate(
-                            it.createdAt.toString()
+                            it.creationDate
                         )
                     )
                 }

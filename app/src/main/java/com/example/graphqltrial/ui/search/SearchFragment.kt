@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.graphqltrial.utils.Result
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.graphqltrial.R
 import com.example.graphqltrial.databinding.FragmentSearchBinding
@@ -22,6 +21,8 @@ import com.example.graphqltrial.utils.showIf
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -30,7 +31,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private val gitHubViewModel by viewModels<GitHubViewModel>()
+    private val gitHubViewModel: GitHubViewModel by activityViewModels()
 
     private var firstSearchParam: String? = null
     private var secondSearchParam: String? = null
@@ -77,6 +78,10 @@ class SearchFragment : Fragment() {
         gitHubViewModel.userData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Result.Success -> {
+                    val action =
+                        SearchFragmentDirections.actionSearchFragmentToUserBioFragment(true)
+                    findNavController().navigate(action)
+
                     //todo show result
                     clearForm()
                 }
