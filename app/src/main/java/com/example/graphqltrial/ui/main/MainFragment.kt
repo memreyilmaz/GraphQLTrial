@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.graphqltrial.R
 import com.example.graphqltrial.databinding.FragmentMainBinding
+import com.example.graphqltrial.utils.SearchSelection
 
 class MainFragment : Fragment() {
 
@@ -28,25 +29,29 @@ class MainFragment : Fragment() {
     }
 
     private fun setButtonListeners() {
-        with(binding){
+        with(binding) {
             buttonShowBio.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_userBioFragment)
             }
             buttonSearchUser.setOnClickListener {
-                //TODO pass search type
-                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+                val action =
+                    MainFragmentDirections.actionMainFragmentToSearchFragment(SearchSelection.User)
+                findNavController().navigate(action)
             }
             buttonSearchRepo.setOnClickListener {
-                //TODO pass search type
-                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+                val action =
+                    MainFragmentDirections.actionMainFragmentToSearchFragment(SearchSelection.Repository)
+                findNavController().navigate(action)
             }
             buttonSearchTopic.setOnClickListener {
-                //TODO pass search type
-                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+                val action =
+                    MainFragmentDirections.actionMainFragmentToSearchFragment(SearchSelection.Topic)
+                findNavController().navigate(action)
             }
             buttonSearch.setOnClickListener {
-                //TODO pass search type
-                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+                val action =
+                    MainFragmentDirections.actionMainFragmentToSearchFragment(SearchSelection.General)
+                findNavController().navigate(action)
             }
         }
     }

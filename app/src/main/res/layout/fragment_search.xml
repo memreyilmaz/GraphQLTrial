@@ -1,14 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.SearchFragment">
+    android:orientation="vertical"
+    android:padding="@dimen/default_padding">
 
-    <include
-        layout="@layout/layout_search_user"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_first"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:visibility="gone"
+        app:errorEnabled="true"
+        app:errorTextColor="@android:color/holo_red_light"
+        app:helperText="@string/edit_text_desc_helper_required"
+        tools:visibility="visible">
 
-    <include
-        layout="@layout/layout_search_repository"/>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-</FrameLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_second"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:visibility="gone"
+        app:errorEnabled="true"
+        app:errorTextColor="@android:color/holo_red_light"
+        app:helperText="@string/edit_text_desc_helper_required"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText_second"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/texView_title_search_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/desc_title_search"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup_search_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:checkedButton="@+id/radioButton_search_repository"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="2"
+        tools:visibility="visible">
+
+        <RadioButton
+            android:id="@+id/radioButton_search_repository"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/desc_radio_button_repository" />
+
+        <RadioButton
+            android:id="@+id/radioButton_search_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/desc_radio_button_user" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/button_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:enabled="false"
+        tools:text="@string/button_desc_search" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -32,15 +32,7 @@ class GitHubRepositoryImpl @Inject constructor(private val client: ApolloClient)
         return client.query(GetTopicQuery(name = name)).await()
     }
 
-    override suspend fun search(
-        query: String,
-        type: SearchType
-    ): Response<SearchQuery.Data> {
-        return client.query(
-            SearchQuery(
-                query = query,
-                type = type
-            )
-        ).await()
+    override suspend fun search(query: String, type: SearchType): Response<SearchQuery.Data> {
+        return client.query(SearchQuery(query = query, type = type)).await()
     }
 }

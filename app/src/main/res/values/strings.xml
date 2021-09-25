@@ -6,16 +6,23 @@
     <string name="button_desc_show_bio">Show My Bio</string>
     <string name="button_desc_search_user">Search User</string>
     <string name="button_desc_search_repo">Search Repository</string>
-    <string name="button_desc_search_topic">Search A Topic</string>
+    <string name="button_desc_search_topic">Search Topic</string>
     <string name="button_desc_search">Search</string>
 
     <string name="desc_bio_followers">%1$d followers</string>
     <string name="desc_bio_following">%1$d following</string>
 
     <string name="desc_title_repositories">Repositories:</string>
+    <string name="desc_title_search">Search:</string>
 
     <string name="edit_text_desc_enter_user_name">User Name</string>
     <string name="edit_text_desc_enter_repository_name">Repository Name</string>
+    <string name="edit_text_desc_enter_topic">Topic</string>
     <string name="edit_text_desc_helper_required">Required *</string>
 
+    <string name="desc_radio_button_repository">Repository</string>
+    <string name="desc_radio_button_user">User</string>
+
+    <string name="desc_error_long_username">Username is too long (maximum is 39 characters).</string>
+    <string name="desc_error_long_repo_name">Repository Name is too long (maximum is 100 characters).</string>
 </resources>
