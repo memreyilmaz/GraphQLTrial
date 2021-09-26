@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.graphqltrial.R
 import com.example.graphqltrial.databinding.FragmentMainBinding
 import com.example.graphqltrial.utils.SearchSelection
 
@@ -31,7 +30,8 @@ class MainFragment : Fragment() {
     private fun setButtonListeners() {
         with(binding) {
             buttonShowBio.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_userBioFragment)
+                val action = MainFragmentDirections.actionMainFragmentToUserBioFragment(null)
+                findNavController().navigate(action)
             }
             buttonSearchUser.setOnClickListener {
                 val action =

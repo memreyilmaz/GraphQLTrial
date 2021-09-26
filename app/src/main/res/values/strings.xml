@@ -25,4 +25,8 @@
 
     <string name="desc_error_long_username">Username is too long (maximum is 39 characters).</string>
     <string name="desc_error_long_repo_name">Repository Name is too long (maximum is 100 characters).</string>
+
+    <string name="desc_empty_topic_search">Your topic response has no results</string>
+    <string name="desc_empty_search">Your search has no results</string>
+    <string name="desc_topic_search_success">Your topic search %1$s response has %2$d stargazers and has %3$s as related topics</string>
 </resources>

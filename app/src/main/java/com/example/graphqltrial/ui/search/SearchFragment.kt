@@ -21,8 +21,18 @@ import com.example.graphqltrial.utils.showIf
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.graphqltrial.SearchQuery
+import com.example.graphqltrial.data.mapper.toRepositoryList
+import com.example.graphqltrial.data.mapper.toUser
+import com.example.graphqltrial.data.mapper.toUserList
+import com.example.graphqltrial.ui.bio.RepositoryListAdapter
+import com.example.graphqltrial.utils.DefaultDateTimeConverter
+import com.example.graphqltrial.utils.dismiss
+import com.example.graphqltrial.utils.onTextChanged
+import com.example.graphqltrial.utils.showIfNotNull
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -31,13 +41,16 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private val gitHubViewModel: GitHubViewModel by activityViewModels()
+    private val gitHubViewModel by viewModels<GitHubViewModel>()
 
     private var firstSearchParam: String? = null
     private var secondSearchParam: String? = null
 
     private val args by navArgs<SearchFragmentArgs>()
     private var searchSelection: SearchSelection? = null
+
+    private val repositoryListAdapter by lazy { RepositoryListAdapter() }
+    private val userListAdapter by lazy { UserListAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,15 +91,18 @@ class SearchFragment : Fragment() {
         gitHubViewModel.userData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Result.Success -> {
-                    val action =
-                        SearchFragmentDirections.actionSearchFragmentToUserBioFragment(true)
-                    findNavController().navigate(action)
-
-                    //todo show result
                     clearForm()
+                    if (response.value?.data?.user == null) {
+                        binding.textViewSearchGeneric.text =
+                            response.value?.errors?.first()?.message
+                    } else {
+                        val action =
+                            SearchFragmentDirections.actionSearchFragmentToUserBioFragment(response.value.data?.user?.toUser())
+                        findNavController().navigate(action)
+                    }
                 }
                 is Result.Error -> {
-                    //todo handle
+                    binding.textViewSearchGeneric.showIfNotNull(response.message)
                 }
             }
             with(binding) {
@@ -97,11 +113,32 @@ class SearchFragment : Fragment() {
         gitHubViewModel.repositoryData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Result.Success -> {
-                    //todo show result
+                    if (response.value?.data?.repository == null && response.value?.errors?.isNotEmpty() == true) {
+                        binding.apply {
+                            textViewSearchGeneric.text = response.value.errors?.first()?.message
+                            layoutItemRepository.root.dismiss()
+                        }
+                    } else {
+                        binding.textViewSearchGeneric.dismiss()
+                        response.value?.data?.repository?.let {
+                            binding.layoutItemRepository.apply {
+                                texViewRepositoryName.text = it.name
+                                texViewRepositoryDescription.showIfNotNull(it.description)
+                                texViewRepositoryUrl.text = it.url.toString()
+                                texViewRepositoryStarCount.text = it.stargazerCount.toString()
+                                texViewRepositoryCreationDate.showIfNotNull(
+                                    DefaultDateTimeConverter().formatDate(
+                                        it.createdAt.toString()
+                                    )
+                                )
+                                root.show()
+                            }
+                        }
+                    }
                     clearForm()
                 }
                 is Result.Error -> {
-                    //todo handle
+                    binding.textViewSearchGeneric.showIfNotNull(response.message)
                 }
             }
             with(binding) {
@@ -112,11 +149,20 @@ class SearchFragment : Fragment() {
         gitHubViewModel.topicData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Result.Success -> {
-                    //todo show result
+                    if (response.value?.data?.topic == null || response.value.data?.topic?.relatedTopics.isNullOrEmpty()) {
+                        binding.textViewSearchGeneric.text =
+                            getString(R.string.desc_empty_topic_search)
+                    } else {
+                        binding.textViewSearchGeneric.text = getString(
+                            R.string.desc_topic_search_success,
+                            response.value.data?.topic?.name,
+                            response.value.data?.topic?.stargazerCount,
+                            response.value.data?.topic?.relatedTopics?.joinToString(separator = ", ") { "${it.name}" })
+                    }
                     clearForm()
                 }
                 is Result.Error -> {
-                    //todo handle
+                    binding.textViewSearchGeneric.showIfNotNull(response.message)
                 }
             }
             with(binding) {
@@ -127,17 +173,41 @@ class SearchFragment : Fragment() {
         gitHubViewModel.searchResultsData.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Result.Success -> {
-                    //todo show result
-                    clearForm()
+                    val responseList = response.value?.data?.search?.nodes
+                    if (responseList.isNullOrEmpty()) {
+                        binding.textViewSearchGeneric.text = getString(R.string.desc_empty_search)
+                    } else {
+                        val repositoryList = responseList.filterNot { it?.asRepository == null }
+                        if (!repositoryList.isNullOrEmpty()) initRepositoryList(repositoryList)
+                        val userList = responseList.filterNot { it?.asUser == null }
+                        if (!userList.isNullOrEmpty()) initUserList(userList)
+                    }
                 }
                 is Result.Error -> {
-                    //todo handle
+                    binding.textViewSearchGeneric.showIfNotNull(response.message)
                 }
             }
             with(binding) {
                 progressBar.showIf(response is Result.Loading)
             }
         }
+    }
+
+    private fun initUserList(userList: List<SearchQuery.Node?>) {
+        binding.recyclerViewSearch.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = userListAdapter
+        }
+        userListAdapter.updateItems(userList.toUserList())
+    }
+
+    private fun initRepositoryList(repositoryList: List<SearchQuery.Node?>) {
+        binding.recyclerViewSearch.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = repositoryListAdapter
+
+        }
+        repositoryListAdapter.updateItems(repositoryList.toRepositoryList())
     }
 
     private fun initSearchUserUi() {
@@ -152,29 +222,16 @@ class SearchFragment : Fragment() {
             textInputLayoutFirst.apply {
                 hint = getString(R.string.edit_text_desc_enter_user_name)
                 show()
-
             }
-            textInputEditTextFirst.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
 
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    firstSearchParam = s.toString().trim()
-                    binding.textInputLayoutFirst.error =
-                        if (firstSearchParam!!.length > GITHUB_USER_NAME_MAX_LENGTH) getString(R.string.desc_error_long_username) else null
+            textInputEditTextFirst.onTextChanged {
+                firstSearchParam = it
+                binding.textInputLayoutFirst.error =
+                    if (firstSearchParam!!.length > GITHUB_USER_NAME_MAX_LENGTH) getString(R.string.desc_error_long_username) else null
 
-                    binding.buttonSearch.isEnabled =
-                        !firstSearchParam.isNullOrEmpty() && firstSearchParam!!.length <= GITHUB_USER_NAME_MAX_LENGTH
-
-                }
-
-                override fun afterTextChanged(s: Editable) {}
-            })
+                binding.buttonSearch.isEnabled =
+                    !firstSearchParam.isNullOrEmpty() && firstSearchParam!!.length <= GITHUB_USER_NAME_MAX_LENGTH
+            }
         }
         observeData()
     }
@@ -193,22 +250,10 @@ class SearchFragment : Fragment() {
                 show()
             }
 
-            textInputEditTextFirst.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    firstSearchParam = s.toString().trim()
-                    binding.buttonSearch.isEnabled = !firstSearchParam.isNullOrEmpty()
-                }
-
-                override fun afterTextChanged(s: Editable) {}
-            })
+            textInputEditTextFirst.onTextChanged {
+                firstSearchParam = it
+                binding.buttonSearch.isEnabled = !firstSearchParam.isNullOrEmpty()
+            }
         }
         observeData()
     }
@@ -256,34 +301,22 @@ class SearchFragment : Fragment() {
                 show()
             }
 
-            textInputEditTextFirst.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
+            textInputEditTextFirst.onTextChanged {
+                firstSearchParam = it
+                if (binding.radioButtonSearchRepository.isChecked) {
+                    binding.textInputLayoutFirst.error =
+                        if (firstSearchParam!!.length > GITHUB_REPOSITORY_NAME_MAX_LENGTH) getString(
+                            R.string.desc_error_long_repo_name
+                        ) else null
+                    binding.buttonSearch.isEnabled =
+                        !firstSearchParam.isNullOrEmpty() && firstSearchParam!!.length <= GITHUB_REPOSITORY_NAME_MAX_LENGTH
+                } else {
+                    binding.textInputLayoutFirst.error =
+                        if (firstSearchParam!!.length > GITHUB_USER_NAME_MAX_LENGTH) getString(R.string.desc_error_long_username) else null
+                    binding.buttonSearch.isEnabled =
+                        !firstSearchParam.isNullOrEmpty() && firstSearchParam!!.length <= GITHUB_USER_NAME_MAX_LENGTH
                 }
-
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    firstSearchParam = s.toString().trim()
-                    if (binding.radioButtonSearchRepository.isChecked) {
-                        binding.textInputLayoutFirst.error =
-                            if (firstSearchParam!!.length > GITHUB_REPOSITORY_NAME_MAX_LENGTH) getString(
-                                R.string.desc_error_long_repo_name
-                            ) else null
-                        binding.buttonSearch.isEnabled =
-                            !firstSearchParam.isNullOrEmpty() && firstSearchParam!!.length <= GITHUB_REPOSITORY_NAME_MAX_LENGTH
-                    } else {
-                        binding.textInputLayoutFirst.error =
-                            if (firstSearchParam!!.length > GITHUB_USER_NAME_MAX_LENGTH) getString(R.string.desc_error_long_username) else null
-                        binding.buttonSearch.isEnabled =
-                            !firstSearchParam.isNullOrEmpty() && firstSearchParam!!.length <= GITHUB_USER_NAME_MAX_LENGTH
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable) {}
-            })
+            }
 
             radioGroupSearchType.setOnCheckedChangeListener { _, id ->
                 when (id) {
@@ -300,13 +333,12 @@ class SearchFragment : Fragment() {
                     }
                 }
             }
-
             observeData()
         }
     }
 
     private fun initSearchRepositoryFormValidation() {
-        val addNewFormTextWatcher: TextWatcher = object : TextWatcher {
+        val searchRepoFormTextWatcher: TextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
@@ -327,8 +359,8 @@ class SearchFragment : Fragment() {
         }
 
         with(binding) {
-            textInputEditTextFirst.addTextChangedListener(addNewFormTextWatcher)
-            textInputEditTextSecond.addTextChangedListener(addNewFormTextWatcher)
+            textInputEditTextFirst.addTextChangedListener(searchRepoFormTextWatcher)
+            textInputEditTextSecond.addTextChangedListener(searchRepoFormTextWatcher)
         }
     }
 

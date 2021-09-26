@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.activity.addCallback
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.graphqltrial.R
@@ -29,12 +31,20 @@ class UserBioFragment : Fragment() {
     private var _binding: FragmentUserBioBinding? = null
     private val binding get() = _binding!!
 
-    private val gitHubViewModel: GitHubViewModel by activityViewModels()
+    private val gitHubViewModel by viewModels<GitHubViewModel>()
 
-    private val repositoriesAdapter by lazy { UserBioRepositoriesAdapter() }
+    private val repositoryListAdapter by lazy { RepositoryListAdapter() }
 
     private val args by navArgs<UserBioFragmentArgs>()
-    private var isUserComingFromSearch : Boolean = false
+    private var user: User? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.action_userBioFragment_to_mainFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,27 +56,12 @@ class UserBioFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        isUserComingFromSearch = args.isComingFromSearch
-        if (isUserComingFromSearch){
-            observeUser()
+        user = args.user
+        if (user != null) {
+            initUi(user)
         } else {
             gitHubViewModel.getBio()
             observeBio()
-        }
-    }
-
-    private fun observeUser() {
-        gitHubViewModel.userData.observe(viewLifecycleOwner) { response ->
-            binding.apply {
-                progressBar.showIf(response is Result.Loading)
-                linearLayoutUserDetail.showIfNot(response is Result.Loading)
-                recyclerViewUserRepositories.showIf(response is Result.Success)
-                texViewUserRepositoriesTitle.showIf(response is Result.Success)
-            }
-            when (response) {
-                is Result.Success -> initUi(response.value?.data?.user?.toUser())
-                is Result.Error -> initErrorUi(response.message)
-            }
         }
     }
 
@@ -85,31 +80,31 @@ class UserBioFragment : Fragment() {
         }
     }
 
-    private fun initUi(result: User?) {
-        result?.let {
-            with(binding) {
-                imageViewUserAvatar.loadImage(it.avatar, requireContext())
-                texViewUserName.showIfNotNull(it.name)
-                texViewUserNickName.text = it.nickname
-                texViewUserBio.showIfNotNull(it.bio)
-                texViewUserFollowersCount.text =
-                    getString(R.string.desc_bio_followers, it.followers)
-                texViewUserFollowingCount.text =
-                    getString(R.string.desc_bio_following, it.following)
-                texViewUserEmail.text = it.email
-                texViewUserWebsite.showIfNotNull(it.website)
-                texViewUserTwitter.showIfNotNull(it.twitterUser)
-            }
-            initRecyclerView(it.repositories)
+    private fun initUi(user: User?) {
+        if (user == null) return
+
+        with(binding) {
+            imageViewUserAvatar.loadImage(user.avatar, requireContext())
+            texViewUserName.showIfNotNull(user.name)
+            texViewUserNickName.text = user.nickname
+            texViewUserBio.showIfNotNull(user.bio)
+            texViewUserFollowersCount.text =
+                getString(R.string.desc_bio_followers, user.followers)
+            texViewUserFollowingCount.text =
+                getString(R.string.desc_bio_following, user.following)
+            texViewUserEmail.text = user.email
+            texViewUserWebsite.showIfNotNull(user.website)
+            texViewUserTwitter.showIfNotNull(user.twitterUser)
         }
+        initRecyclerView(user.repositories)
     }
 
     private fun initRecyclerView(repositories: List<Repository>) {
         binding.recyclerViewUserRepositories.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = repositoriesAdapter
+            adapter = repositoryListAdapter
         }
-        repositoriesAdapter.updateItems(repositories)
+        repositoryListAdapter.updateItems(repositories)
     }
 
     private fun initErrorUi(message: String?) {

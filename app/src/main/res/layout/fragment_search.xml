@@ -87,6 +87,22 @@
         android:enabled="false"
         tools:text="@string/button_desc_search" />
 
+    <TextView
+        android:id="@+id/textView_search_generic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin" />
+
+    <include
+        android:id="@+id/layout_item_repository"
+        android:visibility="gone"
+        layout="@layout/item_repository"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

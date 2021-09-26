@@ -8,8 +8,8 @@ import com.example.graphqltrial.utils.DefaultDateTimeConverter
 import com.example.graphqltrial.data.model.Repository
 import com.example.graphqltrial.utils.showIfNotNull
 
-class UserBioRepositoriesAdapter :
-    RecyclerView.Adapter<UserBioRepositoriesAdapter.RepositoriesViewHolder>() {
+class RepositoryListAdapter :
+    RecyclerView.Adapter<RepositoryListAdapter.RepositoriesViewHolder>() {
 
     private var repositories: List<Repository?> = listOf()
 

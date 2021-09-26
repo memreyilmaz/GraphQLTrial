@@ -21,11 +21,14 @@
         android:id="@+id/userBioFragment"
         android:name="com.example.graphqltrial.ui.bio.UserBioFragment"
         android:label="fragment_user_bio"
-        tools:layout="@layout/fragment_user_bio" >
+        tools:layout="@layout/fragment_user_bio">
+        <action
+            android:id="@+id/action_userBioFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
         <argument
-            android:name="isComingFromSearch"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:name="user"
+            app:argType="com.example.graphqltrial.data.model.User"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
