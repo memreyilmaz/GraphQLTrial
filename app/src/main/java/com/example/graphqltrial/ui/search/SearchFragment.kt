@@ -64,6 +64,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         searchSelection = args.searchSelection
         initSelectedUi()
+        observeData()
     }
 
     private fun initSelectedUi() {
@@ -233,7 +234,6 @@ class SearchFragment : Fragment() {
                     !firstSearchParam.isNullOrEmpty() && firstSearchParam!!.length <= GITHUB_USER_NAME_MAX_LENGTH
             }
         }
-        observeData()
     }
 
     private fun initSearchTopicUi() {
@@ -255,7 +255,6 @@ class SearchFragment : Fragment() {
                 binding.buttonSearch.isEnabled = !firstSearchParam.isNullOrEmpty()
             }
         }
-        observeData()
     }
 
     private fun initSearchRepositoryUi() {
@@ -278,7 +277,6 @@ class SearchFragment : Fragment() {
         }
 
         initSearchRepositoryFormValidation()
-        observeData()
     }
 
     private fun initSearchUi() {
@@ -289,11 +287,9 @@ class SearchFragment : Fragment() {
                 text = getString(R.string.button_desc_search)
                 setOnClickListener {
                     hideKeyboard()
-                    if (binding.radioButtonSearchRepository.isChecked) {
-                        gitHubViewModel.search(firstSearchParam!!, SearchType.REPOSITORY)
-                    } else {
-                        gitHubViewModel.search(firstSearchParam!!, SearchType.USER)
-                    }
+                    val searchType =
+                        if (binding.radioButtonSearchRepository.isChecked) SearchType.REPOSITORY else SearchType.USER
+                    gitHubViewModel.search(firstSearchParam!!, searchType)
                 }
             }
             textInputLayoutFirst.apply {
@@ -333,7 +329,6 @@ class SearchFragment : Fragment() {
                     }
                 }
             }
-            observeData()
         }
     }
 
