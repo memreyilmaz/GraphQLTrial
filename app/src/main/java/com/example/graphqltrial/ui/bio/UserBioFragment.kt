@@ -3,6 +3,7 @@ package com.example.graphqltrial.ui.bio
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
@@ -42,6 +43,7 @@ class UserBioFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setHasOptionsMenu(true)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             findNavController().navigate(R.id.action_userBioFragment_to_mainFragment)
         }
@@ -119,6 +121,14 @@ class UserBioFragment : Fragment() {
 
     private fun setTitle(title: String?) {
         (requireActivity() as AppCompatActivity).supportActionBar?.title = title
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {
