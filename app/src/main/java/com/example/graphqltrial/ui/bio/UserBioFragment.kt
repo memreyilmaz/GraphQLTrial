@@ -20,7 +20,6 @@ import com.example.graphqltrial.utils.Result
 import com.example.graphqltrial.data.model.User
 import com.example.graphqltrial.utils.loadImage
 import com.example.graphqltrial.utils.showIf
-import com.example.graphqltrial.utils.showIfNot
 import com.example.graphqltrial.utils.showIfNotNull
 import com.example.graphqltrial.data.mapper.toUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,7 +72,7 @@ class UserBioFragment : Fragment() {
         gitHubViewModel.bioData.observe(viewLifecycleOwner) { response ->
             binding.apply {
                 progressBar.showIf(response is Result.Loading)
-                linearLayoutUserDetail.showIfNot(response is Result.Loading)
+                linearLayoutUserDetail.showIf(response is Result.Success)
                 recyclerViewUserRepositories.showIf(response is Result.Success)
                 texViewUserRepositoriesTitle.showIf(response is Result.Success)
             }
