@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/userBioFragment"
         android:name="com.example.graphqltrial.ui.bio.UserBioFragment"
-        android:label="fragment_user_bio"
+        android:label="@string/desc_radio_button_user"
         tools:layout="@layout/fragment_user_bio">
         <action
             android:id="@+id/action_userBioFragment_to_mainFragment"

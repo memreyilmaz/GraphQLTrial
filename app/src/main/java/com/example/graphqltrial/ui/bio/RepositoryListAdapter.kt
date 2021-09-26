@@ -8,8 +8,7 @@ import com.example.graphqltrial.utils.DefaultDateTimeConverter
 import com.example.graphqltrial.data.model.Repository
 import com.example.graphqltrial.utils.showIfNotNull
 
-class RepositoryListAdapter :
-    RecyclerView.Adapter<RepositoryListAdapter.RepositoriesViewHolder>() {
+class RepositoryListAdapter : RecyclerView.Adapter<RepositoryListAdapter.RepositoriesViewHolder>() {
 
     private var repositories: List<Repository?> = listOf()
 
@@ -21,10 +20,10 @@ class RepositoryListAdapter :
     }
 
     override fun onBindViewHolder(holder: RepositoriesViewHolder, position: Int) {
-        holder.bind(repositories?.get(position))
+        holder.bind(repositories[position])
     }
 
-    override fun getItemCount() = repositories?.size
+    override fun getItemCount() = repositories.size
 
     fun updateItems(newRepositories: List<Repository>) {
         repositories = newRepositories

@@ -6,15 +6,10 @@
     <dimen name="default_margin">12dp</dimen>
     <dimen name="medium_margin">16dp</dimen>
     <dimen name="large_margin">24dp</dimen>
-    <dimen name="huge_margin">32dp</dimen>
 
     <!-- Paddings -->
     <dimen name="small_padding">8dp</dimen>
-    <dimen name="small_padding_12">12dp</dimen>
     <dimen name="default_padding">16dp</dimen>
-    <dimen name="medium_padding">20dp</dimen>
-    <dimen name="large_padding">24dp</dimen>
-    <dimen name="huge_padding">32dp</dimen>
 
     <!-- Radius -->
     <dimen name="default_radius">16dp</dimen>

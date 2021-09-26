@@ -25,7 +25,7 @@ class GitHubViewModel @Inject constructor(
     private val repository: GitHubRepository,
 ) : ViewModel() {
 
-    val _userData by lazy { MutableLiveData<Result<Response<GithubUserQuery.Data>>>() }
+    private val _userData by lazy { MutableLiveData<Result<Response<GithubUserQuery.Data>>>() }
     val userData: LiveData<Result<Response<GithubUserQuery.Data>>>
         get() = _userData
 

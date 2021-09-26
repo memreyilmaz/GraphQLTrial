@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -49,7 +50,7 @@ class UserBioFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentUserBioBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -59,6 +60,7 @@ class UserBioFragment : Fragment() {
         user = args.user
         if (user != null) {
             initUi(user)
+            setTitle(user?.nickname)
         } else {
             gitHubViewModel.getBio()
             observeBio()
@@ -74,7 +76,11 @@ class UserBioFragment : Fragment() {
                 texViewUserRepositoriesTitle.showIf(response is Result.Success)
             }
             when (response) {
-                is Result.Success -> initUi(response.value?.data?.viewer?.toUser())
+                is Result.Success -> {
+                    val user = response.value?.data?.viewer?.toUser()
+                    setTitle(user?.nickname)
+                    initUi(user)
+                }
                 is Result.Error -> initErrorUi(response.message)
             }
         }
@@ -109,6 +115,10 @@ class UserBioFragment : Fragment() {
 
     private fun initErrorUi(message: String?) {
         binding.texViewError.showIfNotNull(message)
+    }
+
+    private fun setTitle(title: String?) {
+        (requireActivity() as AppCompatActivity).supportActionBar?.title = title
     }
 
     override fun onDestroyView() {

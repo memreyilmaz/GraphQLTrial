@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.graphqltrial.data.model.User
 import com.example.graphqltrial.databinding.ItemUserBinding
 
-class UserListAdapter :
-    RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
+class UserListAdapter : RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
 
     private var userList: List<User?> = listOf()
 
@@ -19,10 +18,10 @@ class UserListAdapter :
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(userList?.get(position))
+        holder.bind(userList[position])
     }
 
-    override fun getItemCount() = userList?.size
+    override fun getItemCount() = userList.size
 
     fun updateItems(newUsers: List<User>) {
         userList = newUsers
